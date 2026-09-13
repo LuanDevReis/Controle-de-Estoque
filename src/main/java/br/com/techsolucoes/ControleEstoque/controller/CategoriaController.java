@@ -4,6 +4,7 @@ import br.com.techsolucoes.ControleEstoque.DTO.CategoriaDTO;
 import br.com.techsolucoes.ControleEstoque.exception.ResourceNotFoundException;
 import br.com.techsolucoes.ControleEstoque.entity.Categoria;
 import br.com.techsolucoes.ControleEstoque.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,50 +25,29 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
-
         this.categoriaService = categoriaService;
     }
 
-
     @PostMapping
-    public ResponseEntity<Categoria> criarCategoria(@RequestBody CategoriaDTO categoriaDTO) {
-        try {
-            Categoria novaCategoria = categoriaService.salvarCategoria(categoriaDTO);
-            return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-
-        }
+    public ResponseEntity<Categoria> criarCategoria(@RequestBody @Valid CategoriaDTO categoriaDTO) {
+        Categoria novaCategoria = categoriaService.salvarCategoria(categoriaDTO);
+        return new ResponseEntity<>(novaCategoria, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<Categoria>> listarCategoria() {
-        try {
-            return ResponseEntity.ok(categoriaService.listarCategoria());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(categoriaService.listarCategoria());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Categoria> buscarPorId(@PathVariable long id) {
-        try {
-            Categoria categoria = categoriaService.buscarPorId(id);
-            return ResponseEntity.ok(categoria);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(categoriaService.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCategoria(@PathVariable long id) {
-        try {
-            categoriaService.deletarCategoria(id);
-            return ResponseEntity.noContent().build();
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-
+        categoriaService.deletarCategoria(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

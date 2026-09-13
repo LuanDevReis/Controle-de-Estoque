@@ -29,7 +29,7 @@ public class CategoriaService {
     public List<Categoria> listarCategoria() {
         List<Categoria> categorias = categoriaRepository.findAll();
         if (categorias.isEmpty()) {
-            throw new IllegalStateException("Nenhuma categoria encontrada.");
+            throw new ResourceNotFoundException("Nenhuma categoria encontrada.");
         }
         return categorias;
     }
@@ -41,14 +41,14 @@ public class CategoriaService {
 
     public void deletarCategoria(long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         categoriaRepository.deleteById(categoria.getId());
     }
 
     public Categoria atualizarCategoria(long id, CategoriaDTO dto) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         categoria.setNome(dto.getNome());
         return categoriaRepository.save(categoria);
