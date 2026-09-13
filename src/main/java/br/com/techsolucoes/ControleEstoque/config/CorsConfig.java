@@ -14,7 +14,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // libera todos os endpoints
-                        .allowedOrigins("http://localhost:4200") // libera só o Angular
+                        .allowedOrigins(
+                                "http://localhost:4200",
+                                "https://controlmaisplus.netlify.app"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
